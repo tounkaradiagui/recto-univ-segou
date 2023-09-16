@@ -27,12 +27,12 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    
+
     public function index()
     {
         $users = Auth::user();
 
-         
+
         if ($users->role == 'admin')
         {
 
@@ -55,9 +55,18 @@ class HomeController extends Controller
             $etudiants_inscris = Etudiant::where('etat_candidat', 'inscrit')->get()->count();
             $etudiants = Etudiant::count();
             $users = User::count();
-            return view('admin.dashboard', compact('etudiants_non_inscris', 'etudiants_inscris', 'etudiants', 'users'));
+            $getEtudiants = Etudiant::select(DB::raw("COUNT(*) as count"))
+                ->whereYear('created_at', date('Y'))
+                ->groupBy(DB::raw("Month(created_at)"))
+                ->pluck('count');
 
-           
+            $getUsers = User::select(DB::raw("COUNT(*) as count"))
+                ->whereYear('created_at', date('Y'))
+                ->groupBy(DB::raw("Month(created_at)"))
+                ->pluck('count');
+            return view('admin.dashboard', compact('etudiants_non_inscris', 'getUsers', 'etudiants_inscris', 'etudiants', 'getEtudiants', 'users'));
+
+
         }
 
 
@@ -69,7 +78,7 @@ class HomeController extends Controller
             return view('users.dashboard', compact('etudiants_users_non_inscris', 'etudiants_inscris', 'etudiants'));
         }
 
-        
+
         elseif ($users->role == 'vendor')
         {
             return view('vendor.dashboard');

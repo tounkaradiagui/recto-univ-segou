@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Models\Etudiant;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,7 +50,12 @@ Route::group(['middleware' => ['auth', 'isAdmin']], function(){
         $etudiants_inscris = Etudiant::where('etat_candidat', 'inscrit')->get()->count();
         $etudiants = Etudiant::count();
         $users = User::count();
-        return view('admin.dashboard', compact('etudiants_non_inscris', 'etudiants_inscris', 'users', 'etudiants'));
+
+        $getEtudiants = Etudiant::select(DB::raw("COUNT(*) as count"))
+        ->whereYear('created_at', date('Y'))
+        ->groupBy(DB::raw("Month(created_at)"))
+        ->pluck('count');
+        return view('admin.dashboard', compact('etudiants_non_inscris', 'etudiants_inscris', 'users', 'etudiants', 'getEtudiants'));
     });
 
     Route::get('/form', [App\Http\Controllers\Admin\EtudiantController::class, 'form'])->name('form.etudiant');

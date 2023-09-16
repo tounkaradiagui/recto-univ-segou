@@ -28,9 +28,9 @@
 
     <script src="{{asset('admin/vendor/jquery/jquery.slim.min.js')}}"></script>
     <script src="{{asset('admin/vendor/jquery/jquery.min.js')}}"></script>
-    
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js" 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.9.2/parsley.min.js"
     integrity="sha512-eyHL1atYNycXNXZMDndxrDhNAegH2BDWt1TmkXJPoGf1WLlNYt08CSjkqF5lnCRmdm3IrkHid8s2jOUY4NIZVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
 
     <style>
@@ -137,7 +137,7 @@
 
     <!-- Core plugin JavaScript-->
     <script src="{{asset('admin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
-    
+
 
     <!-- Custom scripts for all pages-->
     <script src="{{asset('admin/js/sb-admin-2.min.js')}}"></script>
@@ -189,15 +189,15 @@
                 }).done(function(){
                     navigateTo(curIndex()+1);
                 });
-                
+
             });
 
             $sections.each(function(index,section){
                 $(section).find(':input').attr('data-parsley-group','block-'+index);
 
-                
+
             });
-            
+
             navigateTo(0);
         });
     </script>
@@ -270,58 +270,99 @@
         });
     </script>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-{{--    <script>
-        var datas = <?php echo json_encode($datas) ?>
-
-        Highcharts.chart('chart-container', {
-            title:{
-                text:'Augmentation "Etudiant, 202'
-            },
-            subtitle:{
-                text:'Source: Diagui SERVICE '
-            },
-            xAxis:{
-                categories:['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sept', 'Oct', 'Nov', 'Déc']
-            },
-            yAxis:{
-                title:"Nombre de nouveaux étudiants"
-            },
-            legend:{
-                layout:'vertical',
-                align:'right',
-                verticalAlign:'middle'
-            },
-            plotOptions:{
-                series:{
-                    allowPointSelect:true
-                }
-            },
-            series:[{
-                name:'Nouveaux étudiants',
-                data.datas
-            }],
-            responsive:{
-                rules:[
-                    {
-                        condition:{
-                            maxWidth:500
-                        },
-                        chartOptions:{
-                            legend:{
-                                layout:'horizontal',
-                                align:'center',
-                                verticalAlign:'bottom'
-                            }
-                        }
-                    }
-                ]
-            }
-
-
-        })
-    </script> --}}
 
 </body>
+<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" >
+    var datas = <?php echo json_encode($getEtudiants) ?>;
+
+    Highcharts.chart('container', {
+        title:{
+            text:"Augmentation du nombre d'Etudiant"
+        },
+        subtitle:{
+            text:'Source: Rectorat Univ Ségou '
+        },
+        xAxis:{
+            categories:['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Aoû', 'Sept', 'Oct', 'Nov', 'Déc']
+        },
+        yAxis:{
+            title:"Nombre de nouveaux étudiants"
+        },
+        legend:{
+            layout:'vertical',
+            align:'right',
+            verticalAlign:'middle'
+        },
+        plotOptions:{
+            series:{
+                allowPointSelect:true
+            }
+        },
+        series:[{
+            name:'Nouveaux étudiants',
+            data:datas
+        }],
+        responsive:{
+            rules:[
+                {
+                    condition:{
+                        maxWidth:500,
+                        // maxHeight:200
+                    },
+                    chartOptions:{
+                        legend:{
+                            layout:'horizontal',
+                            align:'center',
+                            verticalAlign:'bottom'
+                        }
+                    }
+                }
+            ]
+        }
+
+
+    })
+</script>
+
+// <script>
+//     var datas = <?php echo json_encode($getEtudiants) ?>;
+//     Highcharts.chart('containere', {
+//     chart: {
+//         plotBackgroundColor: null,
+//         plotBorderWidth: null,
+//         plotShadow: false,
+//         type: 'pie'
+//     },
+//     title: {
+//         text: 'Nombre par catégories',
+//         align: 'left'
+//     },
+//     // tooltip: {
+//     //     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+//     // },
+//     // accessibility: {
+//     //     point: {
+//     //         valueSuffix: '%'
+//     //     }
+//     // },
+//     plotOptions: {
+//         pie: {
+//             // allowPointSelect: true,
+//             cursor: 'pointer',
+//             // dataLabels: {
+//             //     enabled: true,
+//             //     format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+//             // }
+//         }
+//     },
+//     series: [{
+//         name: 'Etudiants',
+//         colorByPoint: true,
+//         data:datas
+//     }]
+// });
+
+// </script>
 
 </html>

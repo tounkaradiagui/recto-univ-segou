@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Etudiant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -15,13 +16,17 @@ class DashboardController extends Controller
 
     // public function getNonInscrit()
     // {
-    //     $non_inscrit = Etudiant::where('etat_candidat', 'non_inscrit')->get()->count(); 
+    //     $non_inscrit = Etudiant::where('etat_candidat', 'non_inscrit')->get()->count();
     //     return view('admin.dashboard', comapct('non_inscrit'));
     // }
 
     public function getProfile()
     {
-        return view('admin.profile');
+        $getEtudiants = Etudiant::select(DB::raw("COUNT(*) as count"))
+        ->whereYear('created_at', date('Y'))
+        ->groupBy(DB::raw("Month(created_at)"))
+        ->pluck('count');
+        return view('admin.profile', compact('getEtudiants'));
     }
 
 
@@ -71,11 +76,11 @@ class DashboardController extends Controller
         {
             return back()->with('error', "Le mot de passe ne correspond pas, veuillez entrer le bon mot de passe !");
         }
-        
+
         User::whereId(auth()->user()->id)->update([
             'password'=> Hash::make($request->new_password)
         ]);
-        
+
         return back()->with('success', "Votre mot de passe a été changé !");
     }
 }
